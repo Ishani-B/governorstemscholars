@@ -1,20 +1,12 @@
 # Overdose Detection Project 
-This project uses MediaPipe to track body movements and an LSTM AI model to identify if a movement looks like a seizure. It works by "watching" video clips and learning the difference between normal activity and rhythmic or rigid seizure patterns.
+This repository contains a continuous monitoring computer vision pipeline designed to detect severe human fall events. It maps raw video pixel data into a high-dimensional spatial manifold, evaluates biomechanical anomalies using a LightGBM decision tree ensemble, and dispatches real-time automated telephony alerts via the Twilio REST API.
 
-How to set up your directory?
+* Computer Vision Frontend: Google MediaPipe Tasks API maps video frames into a $\mathbb{R}^{132}$ spatial coordinate space (33 anatomical landmarks $\times$ 4 vectors: $X, Y, Z, \text{Visibility}$).
 
-data (main folder) --> seizures (sub folder) and non-seizures (subfolder)               
-main.py               
+* Machine Learning Engine: Scikit-Learn maintains stateful preprocessing (MinMaxScaler), while LightGBM optimizes the binary classification decision boundary.
 
-Install the tools: Run pip install -r requirements.txt in your terminal.
-Add your videos: Make sure you have at least a few .mp4 or .avi files in both folders.
-Train the AI: Run python main.py.
+* Telephony Integration: Twilio bridges the local Python execution environment to the global SIP/PSTN network to execute physical phone calls.
 
-How does this work generally?
-The script uses MediaPipe to turn the person into a "skeleton" of 33 points.
+* Temporal Smoothing: A double-ended queue calculates moving averages to filter out high-frequency noise and sudden probabilistic spikes.
 
-Step 1: It extracts the (x, y, z) coordinates of the joints.
 
-Step 2: It groups 30 frames together to see how those points move over time.
-
-Step 3: The LSTM model analyzes the rhythm. If it sees high-frequency shaking or sudden stiffness, it classifies it as a seizure.
